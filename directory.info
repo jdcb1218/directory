@@ -1,0 +1,14 @@
+name = Directory
+description = Directory Search.
+dependencies[] = entity
+dependencies[] = entityform
+dependencies[] = rules
+scripts[] = js/script.js
+package = Drupal Easy
+core = 7.x
+; Information added by Drupal.org packaging script on 2015-09-15
+version = "7.x-1.x-dev"
+configure = admin/config/system/directory
+core = "7.x"
+project = "eck_revision"
+datestamp = "1442333647"

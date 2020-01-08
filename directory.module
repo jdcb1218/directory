@@ -1,0 +1,173 @@
+<?php
+include_once 'forms/directory.forms.inc';
+include_once 'includes/api.inc';
+
+/**
+ * @file
+ * Directory module.
+ */
+
+/**
+ * Implements hook_form_alter().
+ */
+function directory_form_alter(&$form, &$form_state, $form_id) {
+
+  switch ($form_id) {
+    case 'campanas_crowd_node_form':
+
+      $header = array(
+        'expectativa' => t('Fecha Expectativa'),
+        'ejecucion' => t('Fecha Ejecución'),
+        'cerrada' => t('Fecha Cerrada'),
+      );
+
+      $data = array(
+        array('expectativa' => '15-sep-2019', 'ejecucion' => '16-sep-2019', 'cerrada' => '17-sep-2019'),
+      );
+
+      $form['time_campain'] = array (
+            '#type' => 'markup', 
+            '#prefix' => '<div id="time-campain">',
+            '#markup' => theme('table', array('header' => $header, 'rows' => $data)), 
+            '#suffix' => '</div>', 
+            '#weight' => -5, 
+      );
+
+      break;
+    
+    default:
+      # code...
+      break;
+  }
+
+}
+
+
+
+/**
+ * Implements hook_help().
+ */
+
+function directory_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#directory':
+      return '<p>' . t('Configuracion modulo directory', array('storage' => 'Configuracion modulo directorio' )) . '</p>';
+  }
+}
+
+/**
+ * Implements hook_permission().
+ */
+
+function directory_permission() {
+  return array(
+    'administer directory' =>  array(
+      'title' => t('Administer directory'),
+      'description' => t('Perform administration directory'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+
+function directory_menu() {
+  $items = array();
+  // Config id Entity for render
+  $items['admin/config/directory'] = array(
+    'title' => t('Configuration entityform directorio'),
+    'description' => t('Config Id Entity'),
+    'page callback' => 'drupal_get_form', 
+    'page arguments' => array('directory_config_entity'), 
+    'access callback' => TRUE
+  );
+  // Render form entityform
+  $items['admin/config/system/directory'] = array(
+    'title' => t('Configuration directorio'),
+    'description' => t('Config module directory'),
+    'position' => 'left',
+    'weight' => -15,    
+    'page callback' => 'directory_config',
+    'access callback' => TRUE,
+  );
+  // Render page directory
+  $items['directorio'] = array( 
+    'description' => t('Form Directory Poli'),
+    'page callback' => 'drupal_get_form', 
+    'page arguments' => array('directory_form'), 
+    'access arguments' => array('access content'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function directory_theme($existing, $type, $theme, $path) {
+  $wrapper = ''; $node = '';
+
+  $themes = array(
+
+    'directory-results' => array(
+    'template' => 'theme/directory-results',
+      'variables' => array(
+        'wrapper' => $wrapper,
+        'node'    => $node,
+      ),    
+    ),
+  
+    'directory-results-stations' => array(
+    'template' => 'theme/directory-results-stations',
+      'variables' => array(
+        'wrapper' => $wrapper,
+        'node'    => $node,
+      ),    
+    ),    
+ 
+    'directory-results-cais' => array(
+    'template' => 'theme/directory-results-cais',
+      'variables' => array(
+        'wrapper' => $wrapper,
+        'node'    => $node,
+      ),    
+    ),  
+
+    'directory-results-quadrant' => array(
+    'template' => 'theme/directory-results-quadrant',
+      'variables' => array(
+        'wrapper' => $wrapper,
+        'node'    => $node,
+      ),    
+    ),  
+
+
+    'directory-results-others-units' => array(
+    'template' => 'theme/directory-results-others-units',
+      'variables' => array(
+        'wrapper' => $wrapper,
+        'node'    => $node,
+      ),    
+    ),  
+
+    'directory-results-keyword' => array(
+    'template' => 'theme/directory-results-keyword',
+      'variables' => array(
+        'wrapper' => $wrapper,
+        'node'    => $node,
+      ),    
+    ),
+
+    'directory-results-dependencies' => array(
+    'template' => 'theme/directory-results-dependencies',
+      'variables' => array(
+        'wrapper' => $wrapper,
+        'node'    => $node,
+      ),    
+    ),
+
+  );
+
+  return $themes;
+}
